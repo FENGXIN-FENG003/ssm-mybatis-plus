@@ -1,6 +1,5 @@
 package com.fengxin.test;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fengxin.mapper.UserMapper;
 import com.fengxin.pojo.User;
 import org.junit.jupiter.api.Test;
