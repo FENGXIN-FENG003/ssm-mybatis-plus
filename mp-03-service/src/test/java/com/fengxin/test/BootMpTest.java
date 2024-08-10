@@ -1,5 +1,7 @@
 package com.fengxin.test;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fengxin.mapper.UserMapper;
 import com.fengxin.pojo.User;
 import com.fengxin.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,9 @@ import java.util.ArrayList;
 public class BootMpTest {
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private UserMapper userMapper;
     
     /**
      * 根据id查询
@@ -64,6 +69,9 @@ public class BootMpTest {
         System.out.println ("saved = " + saved);
     }
     
+    /**
+     * 批量删除
+     */
     @Test
     public void testRemove() {
         ArrayList<Long> ids = new ArrayList<> ();
@@ -73,5 +81,19 @@ public class BootMpTest {
         ids.add (1822235017482317827L);
         boolean b = userService.removeBatchByIds (ids);
         System.out.println (b);
+    }
+    
+    /**
+     * 分页查询
+     */
+    @Test
+    public void testPage(){
+        Page<User> page = new Page<> (1,2);
+        userMapper.selectPage (page,null);
+        System.out.println ("page.getCurrent () = " + page.getCurrent ());
+        System.out.println ("page.getSize () = " + page.getSize ());
+        System.out.println ("page.getTotal () = " + page.getTotal ());
+        System.out.println ("page.getRecords () = " + page.getRecords ());
+        System.out.println ("page.getPages () = " + page.getPages ());
     }
 }
