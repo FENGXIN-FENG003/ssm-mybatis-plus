@@ -1,6 +1,8 @@
 package com.fengxin.test;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fengxin.mapper.UserMapper;
@@ -138,7 +140,9 @@ public class BootMpTest {
     }
     
     /**
-     * AND OR
+     * AND OR<br>
+     * 更新数据<br>
+     * 准备实体类，null值不会更新<br>
      */
     @Test
     public void updateByWrapper(){
@@ -180,7 +184,7 @@ public class BootMpTest {
     
     /**
      * UpdateWrapper<br>
-     * 自带set相关属性参数<br>
+     * 自带set相关属性参数 QueryWrapper还需要创建实体类传入更新数据<br>
      * 可设置null值 QueryWrapper没有此特性<br>
      */
     @Test
@@ -192,4 +196,29 @@ public class BootMpTest {
             System.out.println ("更新成功！");
         }
     }
+    
+    /**
+     * LambdaQueryWrapper使用<br>
+     * 功能：避免列名写错<br>
+     */
+    @Test
+    public void testLambdaQueryWrapper(){
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<> ();
+        lambdaQueryWrapper.eq (User::getName,"Jack")
+                .eq (User::getEmail,"Jack@qq.com");
+    }
+    
+    /**
+     * LambdaQueryWrapper使用<br>
+     * 功能：避免列名写错<br>
+     */
+    @Test
+    public void testLambdaUpdateWrapper(){
+        LambdaUpdateWrapper<User> lambdaUpdateWrapper = new LambdaUpdateWrapper<> ();
+        lambdaUpdateWrapper.eq (User::getName,"Jack")
+                .eq (User::getEmail,"Jack@qq.com")
+                .set(User::getAge,18)
+                .set(User::getEmail,"Jack~~~@qq.com");
+    }
+    
 }
