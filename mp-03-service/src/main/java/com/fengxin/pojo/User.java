@@ -48,4 +48,11 @@ public class User {
     // 命名随意
     @TableLogic
     private Integer deleted;
+    // 乐观锁实现
+    // ALTER TABLE USER ADD VERSION INT DEFAULT 1 ;  # int 类型 乐观锁字段
+    // 获取版本 比对本身版本和系统版本 一致修改 不一致修改失败
+    // 正常写更新sql语句即可
+    @Version
+    @TableField("VERSION")
+    private Integer version;
 }

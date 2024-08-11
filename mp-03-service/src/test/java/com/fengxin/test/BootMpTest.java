@@ -111,6 +111,27 @@ public class BootMpTest {
         userMapper.delete (queryWrapper);
         List<User> users = userMapper.selectList (null);
         System.out.println ("users = " + users);
-        
+    }
+    
+    /**
+     * 乐观锁实现
+     */
+    @Test
+    public void testOptimisticLock(){
+        // 先查询,再更新 获取version数据 根据version实现乐观锁
+        User user1 = userMapper.selectById (1);
+        user1.setAge (30);
+        User user2 = userMapper.selectById (1);
+        user2.setAge (40);
+        userMapper.updateById (user1);
+        userMapper.updateById (user2);
+    }
+    
+    /**
+     * 测试防全表更新或删除
+     */
+    @Test
+    public void testGlobalTableDelete(){
+        userMapper.delete (null);
     }
 }
