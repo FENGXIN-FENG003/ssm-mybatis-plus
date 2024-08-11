@@ -1,9 +1,11 @@
 package com.fengxin.test;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fengxin.mapper.UserMapper;
 import com.fengxin.pojo.User;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -100,6 +102,79 @@ public class BootMpTest {
         System.out.println ("当前页数据量：" + page.getSize ());
         System.out.println ("总条数：" + page.getTotal ());
         System.out.println (page.getRecords ());
+    }
+    
+    /**
+     * QueryWrapper
+     */
+    @Test
+    public void queryByWrapper(){
+        QueryWrapper<User> wrapper = new QueryWrapper<> ();
+        wrapper.like ("name","a");
+        wrapper.between ("age",18,23);
+        wrapper.isNotNull ("email");
+        System.out.println ("userMapper.selectList (wrapper) = " + userMapper.selectList (wrapper));
+    }
+    
+    /**
+     * 排序查询
+     */
+    @Test
+    public void orderBYDesc(){
+        QueryWrapper<User> wrapper = new QueryWrapper<> ();
+        wrapper.orderByDesc ("age");
+        System.out.println ("userMapper.selectList (wrapper) = " + userMapper.selectList (wrapper));
+    }
+    
+    /**
+     * 删除
+     */
+    @Test
+    public void deleteByWrapper(){
+        QueryWrapper<User> wrapper = new QueryWrapper<> ();
+        wrapper.isNull ("name");
+        System.out.println ("userMapper.delete (wrapper) = " + userMapper.delete (wrapper));
+    }
+    
+    /**
+     * AND OR
+     */
+    @Test
+    public void updateByWrapper(){
+        QueryWrapper<User> wrapper = new QueryWrapper<> ();
+        // 链式调用
+        wrapper.like ("name","a").gt ("age",18).or ().isNotNull ("email");
+        User user = new User ();
+        user.setEmail ("useruu@qq.com");
+        user.setAge (19);
+        if (userMapper.update (user,wrapper) > 0) {
+            System.out.println ("更新成功！");
+        }
+    }
+    
+    /**
+     * 查询列 通常用Map接收 因为查询的其他列为空
+     */
+    @Test
+    public void selectCol(){
+        QueryWrapper<User> wrapper = new QueryWrapper<> ();
+        wrapper.like ("name","a");
+        wrapper.select ("name");
+        System.out.println ("userMapper.selectMaps (wrapper) = " + userMapper.selectMaps (wrapper));
+        // userMapper.selectList (wrapper).forEach(System.out::println);
+    }
+    
+    /**
+     * condition条件
+     */
+    @Test
+    public void selectCondition(){
+        QueryWrapper<User> wrapper = new QueryWrapper<> ();
+        String name = "Jack";
+        Integer age = 19;
+        // 使用工具类判断
+        wrapper.eq (StringUtils.isNotBlank (name),"name",name).eq (age > 18,"age",age);
+        userMapper.selectList (wrapper).forEach(System.out::println);
     }
     
 }
