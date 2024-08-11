@@ -1,6 +1,7 @@
 package com.fengxin.test;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fengxin.mapper.UserMapper;
 import com.fengxin.pojo.User;
@@ -76,7 +77,7 @@ public class BootMpTest {
     
     /**
      * 根据实体类更新<br>
-     * TODO:未设置的属性默认为空（包装类） 空数据不会更新数据
+     * TODO:未设置的属性默认为NULL（包装类） 空数据不会更新数据
      */
     @Test
     public void update(){
@@ -177,4 +178,18 @@ public class BootMpTest {
         userMapper.selectList (wrapper).forEach(System.out::println);
     }
     
+    /**
+     * UpdateWrapper<br>
+     * 自带set相关属性参数<br>
+     * 可设置null值 QueryWrapper没有此特性<br>
+     */
+    @Test
+    public void testUpdateWrapper(){
+        UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
+        wrapper.eq ("name" , "Jack").set ("email" , "Jack@qq.com");
+        int update = userMapper.update (wrapper);
+        if (update > 0) {
+            System.out.println ("更新成功！");
+        }
+    }
 }
