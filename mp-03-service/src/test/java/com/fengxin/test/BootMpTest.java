@@ -1,5 +1,6 @@
 package com.fengxin.test;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fengxin.mapper.UserMapper;
 import com.fengxin.pojo.User;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author FENGXIN
@@ -95,5 +97,20 @@ public class BootMpTest {
         System.out.println ("page.getTotal () = " + page.getTotal ());
         System.out.println ("page.getRecords () = " + page.getRecords ());
         System.out.println ("page.getPages () = " + page.getPages ());
+    }
+    
+    /**
+     * 逻辑删除测试
+     * 删除时不会删除数据 而是update字段deleted = 1
+     * 查询时 deleted = 1的数据不会被查询 只会查询deleted = 0 的数据
+     */
+    @Test
+    public void testTableLogicDelete(){
+        QueryWrapper<User> queryWrapper = new QueryWrapper<> ();
+        queryWrapper.eq ("name","Jack");
+        userMapper.delete (queryWrapper);
+        List<User> users = userMapper.selectList (null);
+        System.out.println ("users = " + users);
+        
     }
 }

@@ -1,9 +1,6 @@
 package com.fengxin.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 /**
@@ -46,4 +43,9 @@ public class User {
     private String name;
     private Integer age;
     private String email;
+    // 逻辑删除 0不删除 1删除
+    // 数据库添加字段：ALTER TABLE USER ADD deleted INT DEFAULT 0 ;  # int 类型 1 逻辑删除 0 未逻辑删除
+    // 命名随意
+    @TableLogic
+    private Integer deleted;
 }
