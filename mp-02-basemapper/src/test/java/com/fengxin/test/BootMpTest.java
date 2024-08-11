@@ -1,5 +1,6 @@
 package com.fengxin.test;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fengxin.mapper.UserMapper;
 import com.fengxin.pojo.User;
 import org.junit.jupiter.api.Test;
@@ -79,13 +80,26 @@ public class BootMpTest {
     public void update(){
         User user = new User();
         List<User> users = new ArrayList<> ();
-        user.setId (2);
+        user.setId (2L);
         user.setEmail ("update");
         users.add (user);
         int i = userMapper.updateById (user);
         if (i > 0) {
             System.out.println ("修改成功");
         }
+    }
+    
+    /**
+     * 自定义分页查询
+     */
+    @Test
+    public void testQueryByAge(){
+        Page<User> page = new Page<> (1,2);
+        userMapper.queryByAge (page,1);
+        System.out.println ("当前页：" + page.getCurrent ());
+        System.out.println ("当前页数据量：" + page.getSize ());
+        System.out.println ("总条数：" + page.getTotal ());
+        System.out.println (page.getRecords ());
     }
     
 }
